@@ -308,20 +308,6 @@ ggplot(p, aes(x=POS, y=num)) +
 
 ######### Fig 2 --------------------------------------------
 
-#############  plot gsea  #############  
-
-df <- read.csv('PSCs_gsea.csv' )
-df <- df[order(df$NES),]
-df <- df[df$NES < 0,]
-df <- head(df,n=5)
-df$pathway <- factor(df$pathway, levels=rev(df$pathway))
-
-ggplot(data=df, aes(x=pathway, y=-log(padj))) +
-    geom_bar(stat = "identity", fill=stepped()[13], color="black", alpha=0.7) + 
-    geom_hline(yintercept=-log(0.05), color=stepped()[2]) +
-    theme_classic() + theme_classic() + coord_flip() +
-    scale_y_continuous(expand = c(0,0))
-
 ### A ----
 #  plot gsea (ESCs)
 df <- read.csv('PSCs_gsea.csv')
