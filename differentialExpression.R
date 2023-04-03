@@ -25,6 +25,12 @@ write.csv(counts, paste(test, 'counts.csv', sep='_'))
 counts <- read.csv(paste0(test,'_counts.csv'), row.names=1)
 layout <- read.csv(paste0(test,'_layout.csv'))
 
+layout$muts <- factor(layout$muts, levels = c("WT", "TP53"))
+if(test == 'PSCs') {
+  design <- model.matrix(~layout$CellLineID + layout$muts)}
+if(test == 'Differentiation_timeline_Paper') {
+  design <- model.matrix(~layout$TimePoint + layout$muts)} 
+
 y <- DGEList(counts[, -c(1,2)], genes=counts[c(1,2)])
 keep <- filterByExpr(y, design)
 y <- y[keep, , keep.lib.sizes=FALSE]
@@ -36,12 +42,9 @@ g[g < -0.5] <- -0.5 # floor values to -0.5
 write.csv(cbind(y$genes, g), paste0(test,'_normalized_expression.csv')) # write table
 
 ### DE analysis
-layout$muts <- factor(layout$muts, levels = c("WT", "TP53"))
-if(test == 'PSCs') {
-    design <- model.matrix(~layout$CellLineID + layout$muts)}
-if(test == 'Differentiation_timeline') {
-    layout <- layout[layout$CellState == 'differentiated',] # remove PSCs
-    design <- model.matrix(~layout$TimePoint + layout$muts)} 
+if(test == 'Differentiation_timeline_Paper') {
+  layout <- layout[layout$TimePoint != 0,] # remove PSCs
+  design <- model.matrix(~layout$TimePoint + layout$muts)} 
 
 counts <- counts[,c("ensemblID", "gene_name", layout$Accession)]
 y <- DGEList(counts[, -c(1,2)], genes=counts[c(1,2)])
