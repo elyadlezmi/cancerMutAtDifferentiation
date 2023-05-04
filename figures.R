@@ -133,7 +133,7 @@ ggplot(data=p, aes(x="", y=col2)) +
                    pattern_spacing=0.04, pattern_angle=45) +
   coord_polar("y", start=0) + theme_void() + theme(legend.position="none")
 
-##### for Figs C-F ----
+##### for Figs C-E ----
 mutations <- read.csv(paste0(DIR,'Mutations.csv'), skip = 1)
 mutations$acquisition <- "Unknown (possible germline)"
 mutations[mutations$is_somatic == "True", "acquisition"] <- "Acquired in vitro (undifferentiated)"
@@ -190,7 +190,7 @@ ggplot(data=p, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3.5, fill=col)) +
   scale_fill_manual(values=stepped()[c(15, 15, 3, 3, 7, 7, 12, 12)]) +
   coord_polar(theta="y") + xlim(c(2, 4)) + theme_void() + theme(legend.position="none")
 
-### D ----
+### D top ----
 # mutated genes bars by CellState - left side
 p <- data.frame(table(mutations$Gene, mutations$CellState))
 names(p) <- c("Gene", "var", "Samples")
@@ -217,32 +217,7 @@ ggplot(data=p, aes_string(x="var", y="Samples", fill="Gene")) + ylab("Proprtion 
   scale_fill_manual(values=c(stepped()[1:20], "grey90", "grey75", "grey60", "grey45", "grey30", "grey15", "grey5")) +
   theme_classic() + theme(legend.position="none", axis.title.x=element_blank()) + scale_y_continuous(expand = c(0,0))
 
-### E ----
-# AF density per mut origin - upper
-ggplot() +
-  geom_density(data=mutations[mutations$acquisition == 'Acquired in vitro (undifferentiated)',], aes(x=AF,y=0.1*..count..),
-               size=1.5, bw=0.1, alpha=0.2, color=stepped()[15], fill=stepped()[15]) +
-  geom_density(data=mutations[mutations$acquisition == 'Unknown (possible germline)',], aes(x=AF,y=0.1*..count..),
-               size=1.5, bw=0.1, alpha=0.2, color=stepped()[7], fill=stepped()[7]) +
-  geom_density(data=mutations[mutations$acquisition == 'Acquired / expanded during differentiation',], aes(x=AF,y=0.1*..count..),
-               size=1.5, bw=0.1, alpha=0.2, color=stepped()[3], fill=stepped()[3]) +
-  theme_classic() + xlab('Allelic Frequency') + ylab('Number of mutations') + 
-  scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0), limits=(c(0,1))) + 
-  geom_vline(xintercept=0.5, linetype="dotted")
-
-# AF density by TP53 to others - lower
-genes <- read.csv(paste0(DIR,'MutationSummarizedPerGene.csv'))
-genes <- genes[genes$N_lines >= 2, "Gene"]
-
-ggplot(data=mutations[mutations$Gene %in% genes,], aes(x=AF,y=0.1*..count..)) +
-  geom_density(aes(color=Gene=='TP53', fill=Gene=='TP53'), size=1.5, bw=0.1, alpha=0.2) +
-  theme_classic() + xlab('Allelic Frequency') + ylab('Number of mutations') +
-  scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0), limits=(c(0,1)))  + 
-  geom_vline(xintercept=0.5, linetype="dotted") + 
-  scale_color_manual(values=c(stepped()[c(22,1)])) +
-  scale_fill_manual(values=c(stepped()[c(22,1)]))
-
-### F ----
+### D bottom ----
 # ES\iPS acquired in vitro - left side
 p <- mutations[mutations$acquisition != "Unknown (possible germline)",]
 p <- data.frame(table(p$Gene, p$iPSES))
@@ -269,8 +244,33 @@ ggplot(data=p, aes(x=iPSES, y=Samples, fill=Gene)) +
   theme_classic() + theme(legend.position="none", axis.title.x=element_blank()) + 
   scale_y_continuous(expand = c(0,0), limits=c(0,330))
 
-### G&H ----
-# mapped P53 mutations appearances - fig G
+### E ----
+# AF density per mut origin - upper
+ggplot() +
+  geom_density(data=mutations[mutations$acquisition == 'Acquired in vitro (undifferentiated)',], aes(x=AF,y=0.1*..count..),
+               size=1.5, bw=0.1, alpha=0.2, color=stepped()[15], fill=stepped()[15]) +
+  geom_density(data=mutations[mutations$acquisition == 'Unknown (possible germline)',], aes(x=AF,y=0.1*..count..),
+               size=1.5, bw=0.1, alpha=0.2, color=stepped()[7], fill=stepped()[7]) +
+  geom_density(data=mutations[mutations$acquisition == 'Acquired / expanded during differentiation',], aes(x=AF,y=0.1*..count..),
+               size=1.5, bw=0.1, alpha=0.2, color=stepped()[3], fill=stepped()[3]) +
+  theme_classic() + xlab('Allelic Frequency') + ylab('Number of mutations') + 
+  scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0), limits=(c(0,1))) + 
+  geom_vline(xintercept=0.5, linetype="dotted")
+
+# AF density by TP53 to others - lower
+genes <- read.csv(paste0(DIR,'MutationSummarizedPerGene.csv'))
+genes <- genes[genes$N_lines >= 2, "Gene"]
+
+ggplot(data=mutations[mutations$Gene %in% genes,], aes(x=AF,y=0.1*..count..)) +
+  geom_density(aes(color=Gene=='TP53', fill=Gene=='TP53'), size=1.5, bw=0.1, alpha=0.2) +
+  theme_classic() + xlab('Allelic Frequency') + ylab('Number of mutations') +
+  scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0), limits=(c(0,1)))  + 
+  geom_vline(xintercept=0.5, linetype="dotted") + 
+  scale_color_manual(values=c(stepped()[c(22,1)])) +
+  scale_fill_manual(values=c(stepped()[c(22,1)]))
+
+### F&G ----
+# mapped P53 mutations appearances - fig F
 df <- read.csv(file = paste0(DIR, 'Mutations.csv'), skip = 1)
 
 p <- df[df$Gene == "TP53",]
@@ -285,7 +285,7 @@ ggplot(p, aes(x=POS, y=Accession, label = Mutation.AA)) +
   theme_classic() + xlim(c(0,395)) + xlab("Position along p53 (a.a)") +
   ylab("Number of Samples per Mutation") + scale_y_continuous(expand = c(0,0), limits = c(0,130))
 
-# comparison to cosmic tumors - fig H
+# comparison to cosmic tumors - fig G
 t <- p
 df <- read.csv(file = paste0(DIR, 'V96_38_MUTANTCENSUS.csv'))
 
