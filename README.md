@@ -13,15 +13,15 @@ These findings have significant implications on the need for surveillance of can
 ## File description:
 Analysis.py -  main analysis of post-pipeline results
 
-bamCoverageOfVariants.py - 
+bamCoverageOfVariants.py - calculates coverage of variants from BAM file
 
 differentialExpression.R - differential expression analysis
 
-fastqToFilteredBam.nf - 
+fastqToFilteredBam.nf - generates of BAM file from RNA-seq file
 
 figures.R - builds figures from analyzed results
 
-mainFromBam.nf - 
+mainFromBam.nf - proccesses BAM file summarized in Mutations.csv
 
 projectFuncs.py - cluster of functions used in Analysis.py
 
