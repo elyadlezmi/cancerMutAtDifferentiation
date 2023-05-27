@@ -1,5 +1,5 @@
 # cancerMutAtDifferentiation
-## Paper title:
+## Paper title
 Implications of acquired cancer-related mutations inpluripotent and differentiated cells
 
 A repository of the analysis and presentation of cancer-related mutations during differentiation.
@@ -10,7 +10,7 @@ We have analyzed over 2,200 published transcriptomes from differentiation experi
 These findings have significant implications on the need for surveillance of cancer-related mutations especially in clinical applications.
 
 
-## File description:
+## File description
 Analysis.py -  main analysis of post-pipeline results
 
 bamCoverageOfVariants.py - calculates coverage of variants from BAM file
