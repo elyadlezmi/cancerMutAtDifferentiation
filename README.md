@@ -12,10 +12,17 @@ These findings have significant implications on the need for surveillance of can
 
 ## File description:
 Analysis.py -  main analysis of post-pipeline results
+
 bamCoverageOfVariants.py - 
+
 differentialExpression.R - differential expression analysis
+
 fastqToFilteredBam.nf - 
+
 figures.R - builds figures from analyzed results
+
 mainFromBam.nf - 
+
 projectFuncs.py - cluster of functions used in Analysis.py
+
 star_counts.py - 
